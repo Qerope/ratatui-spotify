@@ -6,14 +6,18 @@ use crossterm::terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScree
 use crossterm::execute;
 use tui::backend::CrosstermBackend;
 use tui::Terminal;
+mod app;
+mod ui;
 
 fn main() -> io::Result<()> {
     enable_raw_mode()?;
     let mut stdout = io::stdout();
     execute!(stdout, EnterAlternateScreen)?;
     let mut terminal = Terminal::new(CrosstermBackend::new(stdout))?;
+    let mut app = app::App::new();
 
     loop {
+        terminal.draw(|f| ui::draw(f, &app))?;
         if event::poll(Duration::from_millis(100))? {
             if let Event::Key(key) = event::read()? {
                 match key.code {
