@@ -16,7 +16,7 @@ impl App {
     pub fn new() -> App {
         App {
             focus: Focus::Playlists,
-            playlists: vec![],
+            playlists: vec!["Liked Songs".into(), "Discover Weekly".into(), "Road trip".into()],
             tracks: vec![],
             playlist_sel: 0,
             track_sel: 0,
