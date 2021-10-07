@@ -8,6 +8,7 @@ use tui::backend::CrosstermBackend;
 use tui::Terminal;
 mod app;
 mod ui;
+mod spotify;
 
 fn main() -> io::Result<()> {
     enable_raw_mode()?;

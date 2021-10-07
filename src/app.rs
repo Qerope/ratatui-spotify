@@ -10,6 +10,7 @@ pub struct App {
     pub tracks: Vec<String>,
     pub playlist_sel: usize,
     pub track_sel: usize,
+    pub client: Option<crate::spotify::Client>,
 }
 
 impl App {
@@ -20,6 +21,7 @@ impl App {
             tracks: vec![],
             playlist_sel: 0,
             track_sel: 0,
+            client: None,
         }
     }
 }
