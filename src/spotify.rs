@@ -11,7 +11,11 @@ pub fn login() -> Client {
         "playlist-read-private"
     ))
     .expect("set RSPOTIFY_REDIRECT_URI");
-    let mut spotify = AuthCodePkceSpotify::new(creds, oauth);
+    let config = Config {
+        token_cached: true,
+        ..Default::default()
+    };
+    let mut spotify = AuthCodePkceSpotify::with_config(creds, oauth, config);
     let url = spotify.get_authorize_url(None).unwrap();
     spotify.prompt_for_token(&url).expect("login failed");
     spotify
