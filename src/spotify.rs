@@ -20,3 +20,9 @@ pub fn login() -> Client {
     spotify.prompt_for_token(&url).expect("login failed");
     spotify
 }
+
+pub fn playlists(c: &Client) -> Vec<String> {
+    c.current_user_playlists_manual(Some(50), None)
+        .map(|p| p.items.into_iter().map(|i| i.name).collect())
+        .unwrap_or_default()
+}

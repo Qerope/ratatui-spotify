@@ -16,6 +16,9 @@ fn main() -> io::Result<()> {
     execute!(stdout, EnterAlternateScreen)?;
     let mut terminal = Terminal::new(CrosstermBackend::new(stdout))?;
     let mut app = app::App::new();
+    let client = spotify::login();
+    app.playlists = spotify::playlists(&client);
+    app.client = Some(client);
 
     loop {
         terminal.draw(|f| ui::draw(f, &app))?;
