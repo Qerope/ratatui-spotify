@@ -26,3 +26,25 @@ pub fn playlists(c: &Client) -> Vec<String> {
         .map(|p| p.items.into_iter().map(|i| i.name).collect())
         .unwrap_or_default()
 }
+
+pub fn tracks(c: &Client, playlist_idx: usize) -> Vec<String> {
+    let lists = match c.current_user_playlists_manual(Some(50), None) {
+        Ok(l) => l.items,
+        Err(_) => return vec![],
+    };
+    let id = match lists.get(playlist_idx) {
+        Some(p) => p.id.clone(),
+        None => return vec![],
+    };
+    c.playlist_items_manual(id, None, None, Some(100), None)
+        .map(|p| {
+            p.items
+                .into_iter()
+                .filter_map(|i| match i.track {
+                    Some(rspotify::model::PlayableItem::Track(t)) => Some(t.name),
+                    _ => None,
+                })
+                .collect()
+        })
+        .unwrap_or_default()
+}

@@ -24,4 +24,13 @@ impl App {
             client: None,
         }
     }
+                self.load_tracks();
+                self.load_tracks();
+
+    pub fn load_tracks(&mut self) {
+        if let Some(c) = &self.client {
+            self.tracks = crate::spotify::tracks(c, self.playlist_sel);
+            self.track_sel = 0;
+        }
+    }
 }
