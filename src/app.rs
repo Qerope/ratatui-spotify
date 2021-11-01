@@ -24,8 +24,39 @@ impl App {
             client: None,
         }
     }
+
+    pub fn toggle_focus(&mut self) {
+        self.focus = match self.focus {
+            Focus::Playlists => Focus::Tracks,
+            Focus::Tracks => Focus::Playlists,
+        };
+    }
+
+    pub fn next(&mut self) {
+        match self.focus {
+            Focus::Playlists if !self.playlists.is_empty() => {
+                self.playlist_sel = (self.playlist_sel + 1) % self.playlists.len();
                 self.load_tracks();
+            }
+            Focus::Tracks if !self.tracks.is_empty() => {
+                self.track_sel = (self.track_sel + 1) % self.tracks.len();
+            }
+            _ => {}
+        }
+    }
+
+    pub fn previous(&mut self) {
+        match self.focus {
+            Focus::Playlists if !self.playlists.is_empty() => {
+                self.playlist_sel = (self.playlist_sel + self.playlists.len() - 1) % self.playlists.len();
                 self.load_tracks();
+            }
+            Focus::Tracks if !self.tracks.is_empty() => {
+                self.track_sel = (self.track_sel + self.tracks.len() - 1) % self.tracks.len();
+            }
+            _ => {}
+        }
+    }
 
     pub fn load_tracks(&mut self) {
         if let Some(c) = &self.client {
