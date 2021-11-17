@@ -64,4 +64,10 @@ impl App {
             self.track_sel = 0;
         }
     }
+
+    pub fn play_selected(&mut self) {
+        if let Some(c) = &self.client {
+            crate::spotify::play(c, self.playlist_sel, self.track_sel);
+        }
+    }
 }

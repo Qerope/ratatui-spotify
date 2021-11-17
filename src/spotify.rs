@@ -48,3 +48,16 @@ pub fn tracks(c: &Client, playlist_idx: usize) -> Vec<String> {
         })
         .unwrap_or_default()
 }
+
+pub fn play(c: &Client, playlist_idx: usize, track_idx: usize) {
+    if let Ok(lists) = c.current_user_playlists_manual(Some(50), None) {
+        if let Some(p) = lists.items.get(playlist_idx) {
+            let _ = c.start_context_playback(
+                rspotify::model::PlayContextId::Playlist(p.id.clone()),
+                None,
+                Some(rspotify::model::Offset::Position(chrono::Duration::seconds(track_idx as i64))),
+                None,
+            );
+        }
+    }
+}
