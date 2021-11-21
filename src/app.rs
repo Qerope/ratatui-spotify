@@ -70,4 +70,10 @@ impl App {
             crate::spotify::play(c, self.playlist_sel, self.track_sel);
         }
     }
+
+    pub fn toggle_pause(&mut self) {
+        if let Some(c) = &self.client {
+            crate::spotify::toggle_pause(c);
+        }
+    }
 }

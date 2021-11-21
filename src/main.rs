@@ -30,6 +30,7 @@ fn main() -> io::Result<()> {
                     KeyCode::Char('j') | KeyCode::Down => app.next(),
                     KeyCode::Char('k') | KeyCode::Up => app.previous(),
                     KeyCode::Enter => app.play_selected(),
+                    KeyCode::Char(' ') => app.toggle_pause(),
                     _ => {}
                 }
             }

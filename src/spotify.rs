@@ -61,3 +61,10 @@ pub fn play(c: &Client, playlist_idx: usize, track_idx: usize) {
         }
     }
 }
+
+pub fn toggle_pause(c: &Client) {
+    match c.current_playback(None, None::<&[_]>) {
+        Ok(Some(pb)) if pb.is_playing => { let _ = c.pause_playback(None); }
+        _ => { let _ = c.resume_playback(None, None); }
+    }
+}
