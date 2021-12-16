@@ -4,12 +4,18 @@ use tui::layout::{Constraint, Direction, Layout};
 use tui::style::{Color, Modifier, Style};
 use tui::widgets::{Block, Borders, List, ListItem, ListState};
 use tui::Frame;
+use tui::widgets::Gauge;
+use ratatui::widgets::Gauge;
 
 pub fn draw<B: Backend>(f: &mut Frame<B>, app: &App) {
+    let rows = Layout::default()
+        .direction(Direction::Vertical)
+        .constraints([Constraint::Min(3), Constraint::Length(3)])
+        .split(f.size());
     let cols = Layout::default()
         .direction(Direction::Horizontal)
         .constraints([Constraint::Percentage(30), Constraint::Percentage(70)])
-        .split(f.size());
+        .split(rows[0]);
 
     let highlight = Style::default().fg(Color::Black).bg(Color::Green).add_modifier(Modifier::BOLD);
     let border = |focused: bool| {
@@ -38,5 +44,14 @@ pub fn draw<B: Backend>(f: &mut Frame<B>, app: &App) {
             .highlight_style(highlight),
         cols[1],
         &mut tstate,
+    );
+
+    let ratio = app.playback.progress_ms as f64 / app.playback.duration_ms as f64;
+    f.render_widget(
+        Gauge::default()
+            .block(Block::default().title(app.playback.title.as_str()).borders(Borders::ALL))
+            .gauge_style(Style::default().fg(Color::Green))
+            .ratio(ratio),
+        rows[1],
     );
 }

@@ -4,6 +4,14 @@ pub enum Focus {
     Tracks,
 }
 
+#[derive(Default, Clone)]
+pub struct Playback {
+    pub title: String,
+    pub progress_ms: u32,
+    pub duration_ms: u32,
+    pub playing: bool,
+}
+
 pub struct App {
     pub focus: Focus,
     pub playlists: Vec<String>,
@@ -11,6 +19,7 @@ pub struct App {
     pub playlist_sel: usize,
     pub track_sel: usize,
     pub client: Option<crate::spotify::Client>,
+    pub playback: Playback,
 }
 
 impl App {
@@ -22,6 +31,7 @@ impl App {
             playlist_sel: 0,
             track_sel: 0,
             client: None,
+            playback: Playback::default(),
         }
     }
 
