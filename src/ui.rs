@@ -46,7 +46,11 @@ pub fn draw<B: Backend>(f: &mut Frame<B>, app: &App) {
         &mut tstate,
     );
 
-    let ratio = app.playback.progress_ms as f64 / app.playback.duration_ms as f64;
+    let ratio = if app.playback.duration_ms == 0 {
+        0.0
+    } else {
+        (app.playback.progress_ms as f64 / app.playback.duration_ms as f64).min(1.0)
+    };
     f.render_widget(
         Gauge::default()
             .block(Block::default().title(app.playback.title.as_str()).borders(Borders::ALL))
