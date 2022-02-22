@@ -9,6 +9,7 @@ use tui::Terminal;
 mod app;
 mod ui;
 mod spotify;
+mod poller;
 
 fn main() -> io::Result<()> {
     enable_raw_mode()?;
@@ -19,9 +20,13 @@ fn main() -> io::Result<()> {
     let client = spotify::login();
     app.playlists = spotify::playlists(&client);
     app.client = Some(client);
+    let rx = poller::start(app.client.clone().unwrap());
 
     loop {
         terminal.draw(|f| ui::draw(f, &app))?;
+        while let Ok(state) = rx.try_recv() {
+            app.playback = state;
+        }
         if event::poll(Duration::from_millis(100))? {
             if let Event::Key(key) = event::read()? {
                 match key.code {
