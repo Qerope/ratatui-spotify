@@ -29,6 +29,16 @@ fn main() -> io::Result<()> {
         }
         if event::poll(Duration::from_millis(100))? {
             if let Event::Key(key) = event::read()? {
+                if app.searching {
+                    match key.code {
+                        KeyCode::Enter => app.run_search(),
+                        KeyCode::Esc => app.searching = false,
+                        KeyCode::Backspace => { app.query.pop(); }
+                        KeyCode::Char(c) => app.query.push(c),
+                        _ => {}
+                    }
+                    continue;
+                }
                 match key.code {
                     KeyCode::Char('q') => break,
                     KeyCode::Tab => app.toggle_focus(),
@@ -36,6 +46,7 @@ fn main() -> io::Result<()> {
                     KeyCode::Char('k') | KeyCode::Up => app.previous(),
                     KeyCode::Enter => app.play_selected(),
                     KeyCode::Char(' ') => app.toggle_pause(),
+                    KeyCode::Char('/') => app.searching = true,
                     _ => {}
                 }
             }

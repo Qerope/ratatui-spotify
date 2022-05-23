@@ -68,3 +68,12 @@ pub fn toggle_pause(c: &Client) {
         _ => { let _ = c.resume_playback(None, None); }
     }
 }
+
+pub fn search(c: &Client, query: &str) -> Vec<String> {
+    c.search(query, rspotify::model::SearchType::Track, None, None, Some(30), None)
+        .map(|r| match r {
+            rspotify::model::SearchResult::Tracks(p) => p.items.into_iter().map(|t| t.name).collect(),
+            _ => vec![],
+        })
+        .unwrap_or_default()
+}

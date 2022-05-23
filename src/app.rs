@@ -20,6 +20,8 @@ pub struct App {
     pub track_sel: usize,
     pub client: Option<crate::spotify::Client>,
     pub playback: Playback,
+    pub searching: bool,
+    pub query: String,
 }
 
 impl App {
@@ -32,6 +34,8 @@ impl App {
             track_sel: 0,
             client: None,
             playback: Playback::default(),
+            searching: false,
+            query: String::new(),
         }
     }
 
@@ -85,5 +89,14 @@ impl App {
         if let Some(c) = &self.client {
             crate::spotify::toggle_pause(c);
         }
+    }
+
+    pub fn run_search(&mut self) {
+        if let Some(c) = &self.client {
+            self.tracks = crate::spotify::search(c, &self.query);
+            self.track_sel = 0;
+            self.focus = Focus::Tracks;
+        }
+        self.searching = false;
     }
 }
