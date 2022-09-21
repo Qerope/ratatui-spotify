@@ -2,6 +2,15 @@ use rspotify::prelude::*;
 use rspotify::{scopes, AuthCodePkceSpotify, Config, Credentials, OAuth};
 
 pub type Client = AuthCodePkceSpotify;
+use std::path::PathBuf;
+
+fn cache_path() -> PathBuf {
+    let mut p = dirs::config_dir().unwrap_or_else(|| PathBuf::from("."));
+    p.push("ratatui-spotify");
+    std::fs::create_dir_all(&p).ok();
+    p.push("token.json");
+    p
+}
 
 pub fn login() -> Client {
     let creds = Credentials::from_env().expect("set RSPOTIFY_CLIENT_ID");
@@ -13,6 +22,7 @@ pub fn login() -> Client {
     .expect("set RSPOTIFY_REDIRECT_URI");
     let config = Config {
         token_cached: true,
+        cache_path: cache_path(),
         ..Default::default()
     };
     let mut spotify = AuthCodePkceSpotify::with_config(creds, oauth, config);
