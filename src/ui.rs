@@ -1,13 +1,11 @@
 use crate::app::{App, Focus};
-use tui::backend::Backend;
-use tui::layout::{Constraint, Direction, Layout};
-use tui::style::{Color, Modifier, Style};
-use tui::widgets::{Block, Borders, List, ListItem, ListState};
-use tui::Frame;
-use tui::widgets::Gauge;
+use ratatui::layout::{Constraint, Direction, Layout};
+use ratatui::style::{Color, Modifier, Style};
+use ratatui::widgets::{Block, Borders, List, ListItem, ListState};
+use ratatui::Frame;
 use ratatui::widgets::Gauge;
 
-pub fn draw<B: Backend>(f: &mut Frame<B>, app: &App) {
+pub fn draw(f: &mut Frame, app: &App) {
     let rows = Layout::default()
         .direction(Direction::Vertical)
         .constraints([Constraint::Min(3), Constraint::Length(3)])
