@@ -87,3 +87,10 @@ pub fn search(c: &Client, query: &str) -> Vec<String> {
         })
         .unwrap_or_default()
 }
+
+pub fn change_volume(c: &Client, delta: i8) {
+    if let Ok(Some(pb)) = c.current_playback(None, None::<&[_]>) {
+        let cur = pb.device.volume_percent.unwrap_or(50) as i16;
+        let _ = c.volume((cur + delta as i16).clamp(0, 100) as u8, None);
+    }
+}

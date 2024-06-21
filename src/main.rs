@@ -47,6 +47,8 @@ fn main() -> io::Result<()> {
                     KeyCode::Enter => app.play_selected(),
                     KeyCode::Char(' ') => app.toggle_pause(),
                     KeyCode::Char('/') => app.searching = true,
+                    KeyCode::Char('+') => app.volume(10),
+                    KeyCode::Char('-') => app.volume(-10),
                     _ => {}
                 }
             }

@@ -99,4 +99,10 @@ impl App {
         }
         self.searching = false;
     }
+
+    pub fn volume(&mut self, delta: i8) {
+        if let Some(c) = &self.client {
+            crate::spotify::change_volume(c, delta);
+        }
+    }
 }
